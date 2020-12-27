@@ -13,9 +13,11 @@ const createToken = (user, secret, expiresIn) => {
 const resolvers = {
   Query: {
     // Usuarios
-    getUser: async (_, { token }) => {
-      const user = await jwt.verify(token, process.env.SECRET)
-      return user
+    // getUser: async (_, { token }) => {
+    getUser: async (_, {}, ctx) => {
+      // const user = await jwt.verify(token, process.env.SECRET)
+      // return user
+      return ctx.user
     },
     // Productos
     getProducts: async () => {
@@ -174,7 +176,6 @@ const resolvers = {
     newUser: async (_, { input }) => {
       const { email, password } = input
       // Revisar si el usuario esta registrado
-
       const existUser = await User.findOne({ email })
       console.log(existUser)
 
@@ -195,7 +196,6 @@ const resolvers = {
     },
     authUser: async (_, { input }) => {
       const { email, password } = input
-
       // verifico si el usuario existe
       const existUser = await User.findOne({ email })
       if (!existUser) {
